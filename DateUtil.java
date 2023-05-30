@@ -313,8 +313,8 @@ public class DateUtil {
     /**
      *
      * @param isAscending 오름차순으로 정렬할건지의 여부
-     * @param dates yyyyMMdd 형식의 String 객체 배열
-     * @return 인자가 2개 미만이라면 빈 리스트를 반환, 2개 이상이라면 날짜순으로 정렬된 리스트를 반환
+     * @param dates 날짜 객체 배열
+     * @return 날짜순으로 정렬된 리스트를 반환
      */
     public static List<LocalDate> sortDates(boolean isAscending,Temporal... dates) {
         if (dates.length < 2) {
