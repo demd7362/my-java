@@ -1,15 +1,23 @@
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.Temporal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
 public class DateUtil {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
+    /*private static final Map<String,String> DAY_MAP = new HashMap<>(){{
+        put("SUNDAY","일");
+        put("MONDAY","월");
+        put("TUESDAY","화");
+        put("WEDNESDAY","수");
+        put("THURSDAY","목");
+        put("FRIDAY","금");
+        put("SATURDAY","토");
+    }};*/ // java 8버전 이하
+    private static final Map<String,String> DAY_MAP =
+            Map.of("SUNDAY","일","MONDAY","월","TUESDAY","화","WEDNESDAY","수","THURSDAY","목","FRIDAY","금","SATURDAY","토");
     /*
     yyyy 연도
     MM 월
@@ -54,13 +62,22 @@ public class DateUtil {
     public static LocalDate parseDate(String date){
         return LocalDate.parse(date,FORMATTER);
     }
+
+    /**
+     * 
+     * @param date 날짜 객체
+     * @return 날짜 객체를 yyyyMMdd 형식으로 포맷
+     */
+    public static String formatDate(Temporal date){
+        return FORMATTER.format(date);
+    }
     /**
      *
      * @param date1 yyyyMMdd 형식의 String 객체 1
      * @param date2 yyyyMMdd 형식의 String 객체 2
      * @return 두 날짜간의 차잇값을 담은 Period 객체를 반환
      */
-    private static Period getDateDiff(String date1,String date2){
+    private static Period dateDiff(String date1,String date2){
         LocalDate ld1 = parseDate(date1);
         LocalDate ld2 = parseDate(date2);
         return Period.between(ld1,ld2);
@@ -72,7 +89,7 @@ public class DateUtil {
      * @param date2 두 날짜간의 차이를 구할 날짜 객체 2
      * @return 두 날짜간의 차잇값을 담은 Period 객체를 반환
      */
-    private static Period getDateDiff(Temporal date1,Temporal date2){
+    private static Period dateDiff(Temporal date1,Temporal date2){
         LocalDate ld1 = LocalDate.from(date1);
         LocalDate ld2 = LocalDate.from(date2);
         return Period.between(ld1,ld2);
@@ -85,7 +102,7 @@ public class DateUtil {
      * @return 두 날짜간의 차이를 년수로 반환
      */
     public static int diffYears(String date1, String date2){
-        return getDateDiff(date1,date2).getYears();
+        return dateDiff(date1,date2).getYears();
     }
     /**
      *
@@ -94,7 +111,7 @@ public class DateUtil {
      * @return 두 날짜간의 차이를 개월수로 반환
      */
     public static int diffMonths(String date1, String date2){
-        return getDateDiff(date1,date2).getMonths();
+        return dateDiff(date1,date2).getMonths();
     }
 
     /**
@@ -104,7 +121,7 @@ public class DateUtil {
      * @return 두 날짜간의 차이를 일수로 반환
      */
     public static int diffDays(String date1, String date2){
-        return getDateDiff(date1,date2).getDays();
+        return dateDiff(date1,date2).getDays();
     }
     /**
      *
@@ -113,7 +130,7 @@ public class DateUtil {
      * @return 두 날짜간의 차이를 년수로 반환
      */
     public static int diffYears(Temporal date1, Temporal date2){
-        return getDateDiff(date1,date2).getYears();
+        return dateDiff(date1,date2).getYears();
     }
 
     /**
@@ -123,7 +140,7 @@ public class DateUtil {
      * @return 두 날짜간의 차이를 개월수로 반환
      */
     public static int diffMonths(Temporal date1, Temporal date2){
-        return getDateDiff(date1,date2).getMonths();
+        return dateDiff(date1,date2).getMonths();
     }
 
     /**
@@ -133,7 +150,7 @@ public class DateUtil {
      * @return 두 날짜간의 차이를 일수로 반환
      */
     public static int diffDays(Temporal date1, Temporal date2){
-        return getDateDiff(date1,date2).getDays();
+        return dateDiff(date1,date2).getDays();
     }
 
     /**
@@ -146,7 +163,7 @@ public class DateUtil {
     public static String subtractYears(String date,int years){
         LocalDate ld = parseDate(date);
         LocalDate targetDate = LocalDate.of(ld.getYear()-years,ld.getMonthValue(),ld.getDayOfMonth());
-        return FORMATTER.format(targetDate);
+        return formatDate(targetDate);
     }
 
     /**
@@ -159,7 +176,7 @@ public class DateUtil {
     public static String subtractYears(Temporal date,int years){
         LocalDate ld = LocalDate.from(date);
         LocalDate targetDate = LocalDate.of(ld.getYear()-years,ld.getMonthValue(),ld.getDayOfMonth());
-        return FORMATTER.format(targetDate);
+        return formatDate(targetDate);
     }
 
     /**
@@ -172,7 +189,7 @@ public class DateUtil {
     public static String subtractMonths(String date,int months){
         LocalDate ld = parseDate(date);
         LocalDate targetDate = LocalDate.of(ld.getYear(),ld.getMonthValue()-months,ld.getDayOfMonth());
-        return FORMATTER.format(targetDate);
+        return formatDate(targetDate);
     }
 
     /**
@@ -185,7 +202,7 @@ public class DateUtil {
     public static String subtractMonths(Temporal date,int months){
         LocalDate ld = LocalDate.from(date);
         LocalDate targetDate = LocalDate.of(ld.getYear(),ld.getMonthValue()-months,ld.getDayOfMonth());
-        return FORMATTER.format(targetDate);
+        return formatDate(targetDate);
     }
 
     /**
@@ -198,7 +215,7 @@ public class DateUtil {
     public static String subtractDays(String date,int days){
         LocalDate ld = parseDate(date);
         LocalDate targetDate = LocalDate.of(ld.getYear(),ld.getMonthValue(),ld.getDayOfMonth()-days);
-        return FORMATTER.format(targetDate);
+        return formatDate(targetDate);
     }
 
     /**
@@ -211,7 +228,7 @@ public class DateUtil {
     public static String subtractDays(Temporal date,int days){
         LocalDate ld = LocalDate.from(date);
         LocalDate targetDate = LocalDate.of(ld.getYear(),ld.getMonthValue(),ld.getDayOfMonth()-days);
-        return FORMATTER.format(targetDate);
+        return formatDate(targetDate);
     }
     /**
      *
@@ -223,7 +240,7 @@ public class DateUtil {
     public static String addYears(String date,int years){
         LocalDate ld = parseDate(date);
         LocalDate targetDate = LocalDate.of(ld.getYear()+years,ld.getMonthValue(),ld.getDayOfMonth());
-        return FORMATTER.format(targetDate);
+        return formatDate(targetDate);
     }
 
     /**
@@ -236,7 +253,7 @@ public class DateUtil {
     public static String addYears(Temporal date,int years){
         LocalDate ld = LocalDate.from(date);
         LocalDate targetDate = LocalDate.of(ld.getYear()+years,ld.getMonthValue(),ld.getDayOfMonth());
-        return FORMATTER.format(targetDate);
+        return formatDate(targetDate);
     }
 
     /**
@@ -249,7 +266,7 @@ public class DateUtil {
     public static String addMonths(String date,int months){
         LocalDate ld = parseDate(date);
         LocalDate targetDate = LocalDate.of(ld.getYear(),ld.getMonthValue()+months,ld.getDayOfMonth());
-        return FORMATTER.format(targetDate);
+        return formatDate(targetDate);
     }
 
     /**
@@ -262,7 +279,7 @@ public class DateUtil {
     public static String addMonths(Temporal date,int months){
         LocalDate ld = LocalDate.from(date);
         LocalDate targetDate = LocalDate.of(ld.getYear(),ld.getMonthValue()+months,ld.getDayOfMonth());
-        return FORMATTER.format(targetDate);
+        return formatDate(targetDate);
     }
 
     /**
@@ -275,7 +292,7 @@ public class DateUtil {
     public static String addDays(String date,int days){
         LocalDate ld = parseDate(date);
         LocalDate targetDate = LocalDate.of(ld.getYear(),ld.getMonthValue(),ld.getDayOfMonth()+days);
-        return FORMATTER.format(targetDate);
+        return formatDate(targetDate);
     }
 
     /**
@@ -288,7 +305,7 @@ public class DateUtil {
     public static String addDays(Temporal date,int days){
         LocalDate ld = LocalDate.from(date);
         LocalDate targetDate = LocalDate.of(ld.getYear(),ld.getMonthValue(),ld.getDayOfMonth()+days);
-        return FORMATTER.format(targetDate);
+        return formatDate(targetDate);
     }
 
 
@@ -328,7 +345,70 @@ public class DateUtil {
         return dateList;
     }
 
+    /**
+     *
+     * @param year 연도
+     * @param month 월
+     * @return 말일
+     */
+    public static int lastDay(int year,int month){
+        LocalDate ld = LocalDate.of(year,month,1);
+        return ld.lengthOfMonth();
+    }
+
+    /**
+     *
+     * @param yyyyMM yyyyMM형식의 String
+     * @return 말일
+     */
+    public static int lastDay(String yyyyMM){
+        if(!yyyyMM.matches("^\\d{6}$")){
+            // do something
+        }
+        int year = Integer.parseInt(yyyyMM.substring(0,4));
+        int month = Integer.parseInt(yyyyMM.substring(4,6));
+        LocalDate ld = LocalDate.of(year,month,1);
+        return ld.lengthOfMonth();
+    }
+
+    /**
+     *
+     * @param year 연도
+     * @return 윤년인지 여부
+     */
+    public static boolean isLeapYear(int year){
+        return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
+    }
+
+    /**
+     *
+     * @return 현재 날짜
+     */
+    public static String nowDate(){
+        LocalDate ld = LocalDate.now();
+        return formatDate(ld);
+    }
+
+    /**
+     *
+     * @param date 날짜 객체
+     * @return 날짜에 해당하는 요일을 반환
+     */
+    public static String getDayOfWeekName(Temporal date){
+        LocalDate ld = LocalDate.from(date);
+        return DAY_MAP.get(ld.getDayOfWeek().name());
+    }
+
+    /**
+     *
+     * @param date yyyyMMdd 형식의 String 객체
+     * @return 날짜에 해당하는 요일을 반환
+     */
+    public static String getDayOfWeekName(String date){
+        LocalDate ld = parseDate(date);
+        return DAY_MAP.get(ld.getDayOfWeek().name());
+    }
 
 
-    
+
 }
