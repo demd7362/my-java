@@ -42,7 +42,7 @@ public class MemoryReferenceExample {
 		System.out.println(originalData.equals(copyData)); // false 
 		copyData.setName("깊은 복사를 했기때문에 오리지널 데이터는 안바뀔거야");
 		System.out.println("copyData : "+copyData.getName()); // 깊은 복사를 했기때문에 오리지널 데이터는 안바뀔거야
-		System.out.println("originalData : "+originalData.getName()); // 나는 카피
+		System.out.println("originalData : "+originalData.getName()); // 나는 오리지널
 
 	}
 }
